@@ -56,8 +56,7 @@ return(
 
     <Form.Group controlId="city">
         <Form.Label>City</Form.Label>
-        <Form.Control> <CityFilter></CityFilter> </Form.Control>
-              
+        <CityFilter></CityFilter>
     </Form.Group>
 
     <Form.Group controlId="street">

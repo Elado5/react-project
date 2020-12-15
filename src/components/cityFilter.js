@@ -24,7 +24,7 @@ function CityFilter() {
   return (
       
     <div>
-      <datalist id="cities-list">
+      <Form.Control controlId="cities-list" type=select>
         {
           cities.map(city => {
             return <option value={city.name}>{city.id} - {city.name}</option>
