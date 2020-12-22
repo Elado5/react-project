@@ -4,7 +4,7 @@ import './index.css';
 import App from './App';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './pages/register';
-import SignUp from './pages/register';
+//import SignUp from './pages/register';
 
 
 <link

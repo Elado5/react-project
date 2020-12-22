@@ -1,4 +1,3 @@
-import DatePicker from 'react-date-picker';
 
 
 const FormField = (props) => {
@@ -25,6 +24,23 @@ const FormField = (props) => {
             </div>
         )
     }
+/*
+    else if (props.type ==='date'){
+        return(
+            <div className="field">
+            <label>{"date"}</label>
+            <DatePicker
+            value={birthdate}
+            defaultValue={new Date()}
+            onChange={setbirthdate}
+            minDate={new Date(1901, 1, 1)}
+            maxDate={new Date()}
+            placeholderText={"Select a date"}
+            />
+            </div>
+        )
+    }
+*/
 
     else if (props.type === 'number'){
         return(

@@ -5,10 +5,8 @@ import '../cssFiles/register.css';
 import FormField from "../components/formField";
 import DatePicker from 'react-date-picker';
 
-
-
 const Register = (props) => {
-
+let users = JSON.parse(localStorage.getItem("users") || "[]"); //מערך ג'ייסון ליוזרים
 const [userName, setUserName] = useState('')
 const [password, setPassword] = useState('')
 const [confirmPassword, setConfirmPassword] = useState('')
@@ -53,6 +51,18 @@ const [phoneNumber, setphoneNumber] = useState('')
             return false;
         }
 
+        if(!(/^(?=.*[A-Z])[a-zA-Z0-9!@#$%^&*]{1,60}$/i.test(userName)))
+        {
+            alert ('הזן שם משתמש באנגלית בלבד ועד 60 תווים')
+            return false;
+        }
+
+        if(!(/^(?=.*[!@#$%^&*])(?=.*[A-Z])(?=.*[0-9])([!@#$%^&*A-Za-z0-9]){6,11}$/.test(password)))
+        {
+            alert('סיסמה לא תקינה, אנא הזן בין 7 ל-12 תווים הכוללים אותיות גדולות וסימן מיוחד')
+            return false;
+        }
+
         if (!(password === confirmPassword))
         {
             alert(`הסיסמאות לא תואמות`)
@@ -74,14 +84,16 @@ const [phoneNumber, setphoneNumber] = useState('')
             alert ('הזן שם משפחה בעברית בלבד')
             return false;
         }
-        let newDate = new Date();
-        let min = new Date(1,1,1901);
-        let max = new Date(newDate.getDate());
 
-        if(birthdate>max || birthdate<min){
-            alert('אנא הזן תאריך הגיוני')
+        if(!(/^[\u0590-\u05fe]+( [\u0590-\u05fe ]+)*$/i.test(street))){ //דורש מילה ראשונה ואם רוצים אפשר להוסיף רווח ועוד אחת
+            alert ('הזן רחוב בעברית')
             return false;
         }
+
+       /* if(birthdate>max || birthdate<min){
+            alert('אנא הזן תאריך הגיוני')
+            return false;
+        }*/
 
 
         if(!(/[0-9]{10}/.test(phoneNumber)))
@@ -95,17 +107,34 @@ const [phoneNumber, setphoneNumber] = useState('')
     //signup function -> לאחר הקלקה על כפתור ההרשמה
     const signup = (event) => {
         event.preventDefault(); //ביטול ניקוי הטופס באופן דיפולטיבי
-        if (checkForm()) {
-            let user = { userName, password, city } //deconstructure
+         //#region deconstructure example for below
             /* same thing as:
             let user = {
                 userName: userName,
                 password: password,
                 city: city
             }
-            */
-            localStorage.setItem('user', JSON.stringify(user))
-            alert(`נרשמת בהצלחה!`)
+            */ 
+           //#endregion 
+        if (checkForm()) {
+            let user = { userName, password, picture, surname, lastName, birthdate, email, city, street, phoneNumber } // יצירת אובייקט עם פרטי המשתמש
+            let exists = false; //בוליאן לסימון האם המייל קיים כבר במערכת
+            
+            for (let i=0; i < users.length; i++)
+            {
+                if (users[i].email === user.email)
+                exists = true;  
+            }
+        
+            if(exists === false)
+            {
+            users.push(user);//דחיפה למערך משתמשים באיחסון המקומי
+            localStorage.setItem("users", JSON.stringify(users)); //שמירה של מצב האיחסוןו המקומי
+            alert(`נרשמת בהצלחה!`)}
+            else
+            {
+                alert('המייל הזה כבר קיים במערכת');
+            }
         }
     }
 
@@ -117,8 +146,6 @@ const [phoneNumber, setphoneNumber] = useState('')
 
 //<FormField type="date" name="תאריך לידה" action={setbirthdate}/> בינתיים בחוץ
     return (
-        
-
         <div className="container">
             <form onSubmit={signup}>
                 <FormField type="text" name="שם משתמש" action={setUserName} />
@@ -128,15 +155,15 @@ const [phoneNumber, setphoneNumber] = useState('')
                 <FormField type="text" name="שם פרטי" action={setsurname}/>
                 <FormField type="text" name="שם משפחה" action={setlastName}/>
                 <FormField type="email" name="דואר אלקטרוני" action={setemail}/>
-                
                 <div className="field">
-                <label>"date"</label>
-                <DatePicker
-                selected={birthdate}
-                onChange={birthdate => setbirthdate(birthdate)}
+                <label>{"date"}</label>
+                <DatePicker //מתוך הרחבה בשם react-date-picker
+                value={birthdate}
+                defaultValue={new Date()}
+                onChange={setbirthdate}
                 minDate={new Date(1901, 1, 1)}
-                maxDate={new Date(2020, 12, 31)}
-                placeholderText="Select a date in February 2020"
+                maxDate={new Date()} //תאריך נוכחי
+                placeholderText={"Select a date"}
                 />
                 </div>
                 <FormField type="list" listId="listOfCities" data={cities} name="עיר" action={setCity} />
