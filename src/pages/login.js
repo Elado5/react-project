@@ -1,9 +1,13 @@
 import FormField from "../components/formField";
 import {useState} from 'react';
 import React from 'react';
+import { useHistory } from "react-router-dom";
+
 
 const Login = (props) =>  {
+    const history = useHistory();
     let users = JSON.parse(localStorage.getItem("users") || "[]"); //מערך ג'ייסון ליוזרים
+    console.log(users)
     const [userName, setUserName] = useState('')
     const [password, setPassword] = useState('')
 
@@ -26,7 +30,7 @@ const Login = (props) =>  {
             return false;
         }
         
-        
+        return true;
     }
 
     const loginSys = (event) => {
@@ -34,8 +38,7 @@ const Login = (props) =>  {
         if (checkLogin()) {
             let userExists = false; //בוליאן לסימון האם קיים כבר במערכת
             let passExists = false; //בוליאן לסימון האם קיים כבר במערכת
-
-           let loginInfo = {userName, password};
+            let loginInfo = {userName, password}; //אובייקט שם משתמש וסיסמה
 
             for (let i=0; i < users.length; i++)
             {
@@ -46,12 +49,16 @@ const Login = (props) =>  {
             for (let i=0; i < users.length; i++)
             {
                 if (users[i].password === loginInfo.password)
-                userExists = true;  
+                passExists = true;  
             }
 
-            if (userExists === false && passExists === false)
+            if (userExists && passExists)
             {
-                alert('התחברת בהצלחה')}
+                sessionStorage.setItem("activeUser", JSON.stringify(loginInfo)); //שמירת שם משתמש וסיסמת המשתמש שהתחבר
+                alert('התחברת בהצלחה')
+                history.push("/profile")
+
+            }
             else
             {
                 alert('שם משתמש או סיסמה לא תקינים');

@@ -1,11 +1,15 @@
 //import Form from 'react-bootstrap/Form';
+import { useHistory } from "react-router-dom";
 import {useEffect, useState} from 'react';
 //import Button from 'react-bootstrap/Button';
 import '../cssFiles/register.css';
 import FormField from "../components/formField";
 import DatePicker from 'react-date-picker';
+import App from '../App';
 
 const Register = (props) => {
+
+const history = useHistory();
 let users = JSON.parse(localStorage.getItem("users") || "[]"); //מערך ג'ייסון ליוזרים
 const [userName, setUserName] = useState('')
 const [password, setPassword] = useState('')
@@ -130,7 +134,10 @@ const [phoneNumber, setphoneNumber] = useState('')
             {
             users.push(user);//דחיפה למערך משתמשים באיחסון המקומי
             localStorage.setItem("users", JSON.stringify(users)); //שמירה של מצב האיחסוןו המקומי
-            alert(`נרשמת בהצלחה!`)}
+            alert(`נרשמת בהצלחה!`)
+            history.push("/login")
+            //return <Redirect to="/login" />
+        }
             else
             {
                 alert('המייל הזה כבר קיים במערכת');
@@ -146,6 +153,7 @@ const [phoneNumber, setphoneNumber] = useState('')
 
 //<FormField type="date" name="תאריך לידה" action={setbirthdate}/> בינתיים בחוץ
     return (
+        
         <div className="container">
             <form onSubmit={signup}>
                 <FormField type="text" name="שם משתמש" action={setUserName} />
