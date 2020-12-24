@@ -30,7 +30,7 @@ const [phoneNumber, setphoneNumber] = useState('')
     useEffect(() => {
         getCitiesFromJson();
     }, []);
-
+    
     //get all the cities from the JSON file
     const getCitiesFromJson = async () => {
         let response = await fetch('./data/israel-cities.json');
@@ -55,7 +55,7 @@ const [phoneNumber, setphoneNumber] = useState('')
             return false;
         }
 
-        if(!(/^(?=.*[A-Z])[a-zA-Z0-9!@#$%^&*]{1,60}$/i.test(userName)))
+        if(!(/^(?=.*[A-Z])[a-zA-Z0-9!@#$%^&*]{1,59}$/i.test(userName)))
         {
             alert ('הזן שם משתמש באנגלית בלבד ועד 60 תווים')
             return false;
@@ -93,12 +93,6 @@ const [phoneNumber, setphoneNumber] = useState('')
             alert ('הזן רחוב בעברית')
             return false;
         }
-
-       /* if(birthdate>max || birthdate<min){
-            alert('אנא הזן תאריך הגיוני')
-            return false;
-        }*/
-
 
         if(!(/[0-9]{10}/.test(phoneNumber)))
         {
@@ -151,7 +145,6 @@ const [phoneNumber, setphoneNumber] = useState('')
         const --> קבוע
     */
 
-//<FormField type="date" name="תאריך לידה" action={setbirthdate}/> בינתיים בחוץ
     return (
         
         <div className="container">
